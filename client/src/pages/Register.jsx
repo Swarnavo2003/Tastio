@@ -9,10 +9,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "@/lib/axios";
+import { toast } from "sonner";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +25,7 @@ const Register = () => {
     role: "user",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -34,16 +37,39 @@ const Register = () => {
     setFormData({ ...formData, role: e.target.value });
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    setFormData({
-      fullName: "",
-      email: "",
-      password: "",
-      mobile: "",
-      role: "user",
-    });
+    if (
+      !formData.fullName ||
+      !formData.email ||
+      !formData.password ||
+      !formData.mobile ||
+      !formData.role
+    ) {
+      toast.error("All fields are required");
+      return;
+    }
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post("/auth/register", formData);
+      if (response.data.success) {
+        toast.success(response.data.message || "Registration successful!");
+        setFormData({
+          fullName: "",
+          email: "",
+          password: "",
+          mobile: "",
+          role: "user",
+        });
+        setShowPassword(false);
+        navigate("/");
+      }
+    } catch (error) {
+      const message = error.response.data.message || "Something went wrong";
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 bg-gray-100">
@@ -143,9 +169,17 @@ const Register = () => {
             </div>
             <Button
               type="submit"
+              disabled={loading}
               className="w-full cursor-pointer font-semibold"
             >
-              Register
+              {loading ? (
+                <>
+                  <Loader2 className="animate-spin mr-1" />
+                  Loading...
+                </>
+              ) : (
+                <span>Register</span>
+              )}
             </Button>
           </form>
           <Separator className="my-2" />
