@@ -37,6 +37,13 @@ const Register = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
+    setFormData({
+      fullName: "",
+      email: "",
+      password: "",
+      mobile: "",
+      role: "user",
+    });
   };
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 bg-gray-100">
@@ -105,7 +112,7 @@ const Register = () => {
               {showPassword ? (
                 <EyeOff
                   onClick={() => setShowPassword(false)}
-                  className="size-5 absolute right-4 translate-y-1/4"
+                  className="size-5 absolute right-4 top-10 -translate-y-1/4"
                 />
               ) : (
                 <Eye
@@ -129,7 +136,7 @@ const Register = () => {
                     }
                       `}
                   >
-                    {role}
+                    <span>{role}</span>
                   </Button>
                 ))}
               </div>
@@ -142,7 +149,7 @@ const Register = () => {
             </Button>
           </form>
           <Separator className="my-2" />
-          <Button variant={"outline"} className="w-full">
+          <Button variant={"outline"} className="w-full cursor-pointer">
             <FcGoogle />
             Register with Google
           </Button>
