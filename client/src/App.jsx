@@ -1,8 +1,13 @@
+import { Route, Routes } from "react-router-dom";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+
 function App() {
   return (
-    <div>
-      <h1 className="text-3xl bg-amber-700">Tastio</h1>
-    </div>
+    <Routes>
+      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
+    </Routes>
   );
 }
 
