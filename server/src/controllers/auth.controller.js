@@ -1,6 +1,6 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
-import { registerSchema } from "../validations/auth.validation.js";
+import { loginSchema, registerSchema } from "../validations/auth.validation.js";
 import { asyncHandler } from "../utils/async-handler.js";
 import { ApiError } from "../utils/api-error.js";
 import { ApiResponse } from "../utils/api-response.js";
@@ -47,4 +47,41 @@ export const registerUser = asyncHandler(async (req, res) => {
   return res
     .status(201)
     .json(new ApiResponse(201, user, "User created successfully"));
+});
+
+export const loginUser = asyncHandler(async (req, res) => {
+  const result = loginSchema.safeParse(req.body);
+
+  if (!result.success) {
+    throw new ApiError(400, result.error.message);
+  }
+
+  const { email, password } = result.data;
+
+  if (!email || !password) {
+    throw new ApiError(400, "All fields are required");
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new ApiError(400, "User not found");
+  }
+
+  const isPasswordMatch = await bcrypt.compare(password, user.password);
+  if (!isPasswordMatch) {
+    throw new ApiError(400, "Invalid credentials");
+  }
+
+  const token = await generateToken(user._id);
+
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: false,
+    sameSite: "strict",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "User logged in successfully"));
 });

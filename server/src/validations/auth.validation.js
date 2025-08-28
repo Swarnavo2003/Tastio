@@ -12,3 +12,8 @@ export const registerSchema = z.object({
     .min(10, "Mobile number must be at least 10 characters long"),
   role: z.enum(["user", "owner", "deliveryBoy"]),
 });
+
+export const loginSchema = z.object({
+  email: z.string().min(3, "Email must be at least 3 characters long"),
+  password: z.string().min(6, "Password must be at least 6 characters long"),
+});
