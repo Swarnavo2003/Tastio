@@ -121,12 +121,7 @@ const Register = () => {
             </div>
 
             <div className="space-y-2 relative">
-              <div className="flex items-center justify-between">
-                <Label>Password</Label>
-                <p className="font-light text-sm cursor-pointer">
-                  Forgot Password?
-                </p>
-              </div>
+              <Label>Password</Label>
               <Input
                 type={showPassword ? "text" : "password"}
                 name="password"
