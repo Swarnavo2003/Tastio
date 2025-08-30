@@ -5,6 +5,7 @@ import { asyncHandler } from "../utils/async-handler.js";
 import { ApiError } from "../utils/api-error.js";
 import { ApiResponse } from "../utils/api-response.js";
 import { generateToken } from "../utils/token.js";
+import { sendOtpMail } from "../utils/mail.js";
 
 export const registerUser = asyncHandler(async (req, res) => {
   const result = registerSchema.safeParse(req.body);
@@ -91,4 +92,29 @@ export const logoutUser = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, null, "User logged out successfully"));
+});
+
+export const sendOtp = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    throw new ApiError(400, "Email is required");
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new ApiError(400, "User not found");
+  }
+
+  const otp = Math.floor(Math.random() * 1000000).toString();
+
+  user.resetOtp = otp;
+  user.otpExpires = Date.now() + 10 * 60 * 1000;
+  await user.save();
+
+  await sendOtpMail(user.email, otp);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, null, "OTP sent successfully"));
 });
