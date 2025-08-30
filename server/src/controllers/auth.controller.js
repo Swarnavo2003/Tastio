@@ -118,3 +118,60 @@ export const sendOtp = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, null, "OTP sent successfully"));
 });
+
+export const verifyOtp = asyncHandler(async (req, res) => {
+  const { email, otp } = req.body;
+
+  if (!otp) {
+    throw new ApiError(400, "OTP is required");
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new ApiError(400, "User not found");
+  }
+
+  if (user.resetOtp !== otp) {
+    throw new ApiError(400, "Invalid OTP");
+  }
+
+  if (user.otpExpires < Date.now()) {
+    throw new ApiError(400, "OTP has expired");
+  }
+
+  user.isOtpVerified = true;
+  user.resetOtp = undefined;
+  user.otpExpires = undefined;
+  await user.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, null, "OTP verified successfully"));
+});
+
+export const resetPassword = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!password) {
+    throw new ApiError(400, "Password is required");
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new ApiError(400, "User not found");
+  }
+
+  if (!user.isOtpVerified) {
+    throw new ApiError(400, "OTP not verified");
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  user.password = hashedPassword;
+  user.isOtpVerified = false;
+  await user.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, null, "Password reset successfully"));
+});
