@@ -8,15 +8,18 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { axiosInstance } from "@/lib/axios";
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
     password: "",
@@ -28,14 +31,65 @@ const ForgotPassword = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSendOTP = (e) => {
+  const handleSendOTP = async (e) => {
     e.preventDefault();
-    setStep(2);
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post("/auth/send-otp", {
+        email,
+      });
+      if (response.data.success) {
+        toast.success(response.data.message || "OTP sent successfully!");
+        setStep(2);
+        setLoading(false);
+      }
+    } catch (error) {
+      const message = error.response.data.message || "Something went wrong";
+      toast.error(message);
+    }
   };
 
-  const handleVerifyOTP = (e) => {
+  const handleVerifyOTP = async (e) => {
     e.preventDefault();
-    setStep(3);
+    setLoading(true);
+    try {
+      const response = await axiosInstance.post("/auth/verify-otp", {
+        email,
+        otp,
+      });
+      if (response.data.success) {
+        toast.success(response.data.message || "OTP verified successfully!");
+        setStep(3);
+        setLoading(false);
+      }
+    } catch (error) {
+      const message = error.response.data.message || "Something went wrong";
+      toast.error(message);
+    }
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      if (formData.password !== formData.confirmPassword) {
+        toast.error("Passwords do not match");
+        setLoading(false);
+        return;
+      }
+      const response = await axiosInstance.post("/auth/reset-password", {
+        email,
+        password: formData.password,
+      });
+      if (response.data.success) {
+        toast.success(response.data.message || "Password reset successfully!");
+        navigate("/login");
+        setLoading(false);
+      }
+    } catch (error) {
+      const message = error.response.data.message || "Something went wrong";
+      toast.error(message);
+    }
   };
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 bg-gray-100">
@@ -91,8 +145,8 @@ const ForgotPassword = () => {
                 />
               </div>
               <div className="flex justify-end">
-                <Button type="submit" className="">
-                  Send OTP
+                <Button type="submit" disabled={loading} className="">
+                  {loading ? "Sending OTP..." : "Send OTP"}
                 </Button>
               </div>
             </form>
@@ -105,18 +159,20 @@ const ForgotPassword = () => {
                 <Input
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
-                  type="email"
+                  type="text"
                   className="focus:outline-none ring-0 focus:ring-offset-0 focus:border-input focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
               </div>
               <div className="flex justify-end">
-                <Button className="">Send OTP</Button>
+                <Button disabled={loading} className="">
+                  {loading ? "Verifying OTP..." : "Verify OTP"}
+                </Button>
               </div>
             </form>
           )}
 
           {step === 3 && (
-            <form className="space-y-4">
+            <form onSubmit={handleResetPassword} className="space-y-4">
               <div className="space-y-2 ">
                 <Label>Password</Label>
                 <Input
@@ -138,7 +194,9 @@ const ForgotPassword = () => {
                   className="focus:outline-none ring-0 focus:ring-offset-0 focus:border-input focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
               </div>
-              <Button className="w-full">Reset Password</Button>
+              <Button type="submit" disabled={loading} className="w-full">
+                {loading ? "Please wait..." : "Reset Password"}
+              </Button>
             </form>
           )}
         </CardContent>
