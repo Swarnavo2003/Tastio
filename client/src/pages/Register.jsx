@@ -15,6 +15,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { setUserData } from "@/store/slices/userSlice";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -27,6 +29,7 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -54,6 +57,7 @@ const Register = () => {
       const response = await axiosInstance.post("/auth/register", formData);
       if (response.data.success) {
         toast.success(response.data.message || "Registration successful!");
+        dispatch(setUserData(response.data.data));
         setFormData({
           fullName: "",
           email: "",
@@ -70,6 +74,12 @@ const Register = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogleLogin = () => {
+    window.location.href = `${
+      import.meta.env.VITE_BACKEND_BASE_URL
+    }/api/v1/auth/google`;
   };
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 bg-gray-100">
@@ -178,7 +188,12 @@ const Register = () => {
             </Button>
           </form>
           <Separator className="my-2" />
-          <Button variant={"outline"} className="w-full cursor-pointer">
+          <Button
+            type="button"
+            variant={"outline"}
+            onClick={handleGoogleLogin}
+            className="w-full cursor-pointer"
+          >
             <FcGoogle />
             Register with Google
           </Button>

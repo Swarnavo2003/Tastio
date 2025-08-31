@@ -15,6 +15,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { axiosInstance } from "@/lib/axios";
 import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { setUserData } from "@/store/slices/userSlice";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -24,6 +26,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -41,6 +44,7 @@ const Login = () => {
       const response = await axiosInstance.post("/auth/login", formData);
       if (response.data.success) {
         toast.success(response.data.message || "Registration successful!");
+        dispatch(setUserData(response.data.data));
         setFormData({
           email: "",
           password: "",
