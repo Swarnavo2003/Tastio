@@ -23,6 +23,16 @@ const userSchema = new mongoose.Schema(
       enum: ["user", "owner", "deliveryBoy"],
       required: true,
     },
+    image: {
+      type: {
+        url: String,
+        public_id: String,
+      },
+      default: {
+        url: "",
+        public_id: "",
+      },
+    },
     resetOtp: {
       type: String,
     },

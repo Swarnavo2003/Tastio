@@ -55,6 +55,12 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  const handleGoogleLogin = () => {
+    window.location.href = `${
+      import.meta.env.VITE_BACKEND_BASE_URL
+    }/api/v1/auth/google`;
+  };
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4 bg-gray-100">
       <Card className="w-full max-w-md">
@@ -127,7 +133,12 @@ const Login = () => {
             </Button>
           </form>
           <Separator className="my-2" />
-          <Button variant={"outline"} className="w-full cursor-pointer">
+          <Button
+            type="button"
+            variant={"outline"}
+            onClick={handleGoogleLogin}
+            className="w-full cursor-pointer"
+          >
             <FcGoogle />
             Login with Google
           </Button>

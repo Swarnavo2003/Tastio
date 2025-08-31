@@ -3,6 +3,9 @@ import dotenv from "dotenv";
 dotenv.config({ path: "./.env", quiet: true });
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import session from "express-session";
+import passport from "passport";
+import "./auth/google.js";
 
 import connectDB from "./config/db.config.js";
 import { errorHandler } from "./utils/error-handler.js";
@@ -23,6 +26,21 @@ app.use(
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   })
 );
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false,
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // api
 app.use("/api/v1/auth", authRouter);
