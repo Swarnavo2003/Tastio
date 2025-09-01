@@ -43,7 +43,7 @@ const Login = () => {
     try {
       const response = await axiosInstance.post("/auth/login", formData);
       if (response.data.success) {
-        toast.success(response.data.message || "Registration successful!");
+        toast.success(response.data.message || "Login successful!");
         dispatch(setUserData(response.data.data));
         setFormData({
           email: "",

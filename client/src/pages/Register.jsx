@@ -36,8 +36,8 @@ const Register = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleRoleChange = (e) => {
-    setFormData({ ...formData, role: e.target.value });
+  const handleRoleChange = (role) => {
+    setFormData({ ...formData, role });
   };
 
   const handleFormSubmit = async (e) => {
@@ -161,7 +161,7 @@ const Register = () => {
                     variant={formData.role === role ? "default" : "outline"}
                     key={index}
                     value={role}
-                    onClick={handleRoleChange}
+                    onClick={() => handleRoleChange(role)}
                     className={`border-2 border-primary text-primary cursor-pointer ${
                       role === formData.role ? "text-white" : ""
                     }

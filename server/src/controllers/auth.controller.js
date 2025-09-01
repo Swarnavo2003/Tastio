@@ -88,10 +88,22 @@ export const loginUser = asyncHandler(async (req, res) => {
 });
 
 export const logoutUser = asyncHandler(async (req, res) => {
-  res.clearCookie("token");
-  return res
-    .status(200)
-    .json(new ApiResponse(200, null, "User logged out successfully"));
+  if (req.isAuthenticated()) {
+    req.logout((err) => {
+      if (err) return next(err);
+      req.session.destroy(() => {
+        res.clearCookie("connect.sid");
+        return res
+          .status(200)
+          .json(new ApiResponse(200, null, "User logged out successfully"));
+      });
+    });
+  } else {
+    res.clearCookie("token");
+    return res
+      .status(200)
+      .json(new ApiResponse(200, null, "User logged out successfully"));
+  }
 });
 
 export const sendOtp = asyncHandler(async (req, res) => {
