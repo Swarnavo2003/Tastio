@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 
 function App() {
   const { userData } = useSelector((state) => state.user);
-  if (userData) console.log(userData);
   return (
     <Routes>
       <Route
