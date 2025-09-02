@@ -18,3 +18,24 @@ export const addItemSchema = z.object({
     "Others",
   ]),
 });
+
+export const updateItemSchema = z.object({
+  name: z.string().min(3, "Name must be at least 3 characters long").optional(),
+  price: z.string().min(1, "Price must be greater than 0").optional(),
+  foodType: z.enum(["Veg", "Non-Veg"]).optional(),
+  category: z
+    .enum([
+      "Snacks",
+      "Main Course",
+      "Desserts",
+      "Pizza",
+      "Burgers",
+      "Sandwiches",
+      "South Indian",
+      "North Indian",
+      "Chinese",
+      "Fast Food",
+      "Others",
+    ])
+    .optional(),
+});
