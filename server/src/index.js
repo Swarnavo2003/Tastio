@@ -13,6 +13,7 @@ import { errorHandler } from "./utils/error-handler.js";
 import authRouter from "./routes/auth.routes.js";
 import userRouter from "./routes/user.routes.js";
 import shopRouter from "./routes/shop.routes.js";
+import itemRouter from "./routes/item.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -48,6 +49,7 @@ app.use(passport.session());
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/shop", shopRouter);
+app.use("/api/v1/item", itemRouter);
 
 // error handler
 app.use(errorHandler);
