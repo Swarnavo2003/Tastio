@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config({ quiet: true });
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 import { ApiError } from "./api-error.js";
@@ -10,18 +12,30 @@ cloudinary.config({
 
 export const uploadToCloudinary = async (localFilePath, folder = "uploads") => {
   try {
-    if (!localFilePath) return null;
+    if (!localFilePath) {
+      throw new ApiError(400, "File path is required");
+    }
+
+    if (!fs.existsSync(localFilePath)) {
+      throw new ApiError(400, "File not found");
+    }
 
     const result = await cloudinary.uploader.upload(localFilePath, {
       folder: folder,
     });
 
-    fs.unlinkSync(file);
+    if (fs.existsSync(localFilePath)) {
+      fs.unlinkSync(localFilePath);
+      console.log("Local file deleted:", localFilePath);
+    }
 
     return result;
   } catch (error) {
-    fs.unlinkSync(file);
+    if (fs.existsSync(localFilePath)) {
+      fs.unlinkSync(localFilePath);
+    }
     console.log("Error in uploading to cloudinary", error);
+    throw new ApiError(500, "Error in uploading to cloudinary");
   }
 };
 
