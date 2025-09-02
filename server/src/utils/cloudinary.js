@@ -26,7 +26,7 @@ export const uploadToCloudinary = async (localFilePath, folder = "uploads") => {
 
     if (fs.existsSync(localFilePath)) {
       fs.unlinkSync(localFilePath);
-      console.log("Local file deleted:", localFilePath);
+      // console.log("Local file deleted:", localFilePath);
     }
 
     return result;
