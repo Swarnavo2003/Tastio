@@ -7,7 +7,10 @@ const itemSchema = mongoose.Schema(
       required: true,
     },
     image: {
-      type: String,
+      type: {
+        url: String,
+        public_id: String,
+      },
       required: true,
     },
     shop: {
