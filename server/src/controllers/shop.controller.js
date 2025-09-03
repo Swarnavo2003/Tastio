@@ -96,3 +96,15 @@ export const updateShop = asyncHandler(async (req, res) => {
   await shop.save();
   return res.status(200).json(new ApiResponse(200, shop, "Shop updated"));
 });
+
+export const getMyShop = asyncHandler(async (req, res) => {
+  const ownerId = req.user._id;
+  if (!ownerId) {
+    throw new ApiError(401, "Unauthorized");
+  }
+  const shop = await Shop.findOne({ owner: ownerId }).populate("owner items");
+  if (!shop) {
+    throw new ApiError(404, "Shop not found");
+  }
+  return res.status(200).json(new ApiResponse(200, shop, "Shop found"));
+});
