@@ -19,6 +19,7 @@ import { Button } from "../ui/button";
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const { userData, city } = useSelector((state) => state.user);
+  const { myShopData } = useSelector((state) => state.owner);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -88,14 +89,18 @@ const Navbar = () => {
               </span>
             </div>
           ) : (
-            <Button
-              size={"sm"}
-              variant="outline"
-              className="border-2 border-primary text-primary hover:text-primary/90 hover:bg-primary/10 cursor-pointer"
-            >
-              <PlusCircle className="mr-0 md:mr-1" />
-              <span className="hidden md:inline">Add Food Items</span>
-            </Button>
+            <>
+              {myShopData && (
+                <Button
+                  size={"sm"}
+                  variant="outline"
+                  className="border-2 border-primary text-primary hover:text-primary/90 hover:bg-primary/10 cursor-pointer"
+                >
+                  <PlusCircle className="mr-0 md:mr-1" />
+                  <span className="hidden md:inline">Add Food Items</span>
+                </Button>
+              )}
+            </>
           )}
           {userData.role === "user" ? (
             <Button

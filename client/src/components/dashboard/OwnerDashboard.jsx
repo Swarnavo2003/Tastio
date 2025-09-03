@@ -1,10 +1,15 @@
+import { useSelector } from "react-redux";
+
 const OwnerDashboard = () => {
+  const { myShopData } = useSelector((state) => state.owner);
   return (
-    <div className="w-full">
-      <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-semibold mb-6">
-          Welcome to Owner Dashboard
-        </h2>
+    <div className="container mx-auto px-4">
+      <div className="w-full max-w-6xl mx-auto">
+        {!myShopData ? (
+          <div>Create Shop Form</div>
+        ) : (
+          <div>Add Items To Shop</div>
+        )}
       </div>
     </div>
   );

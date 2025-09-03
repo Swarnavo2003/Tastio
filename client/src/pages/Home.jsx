@@ -4,6 +4,7 @@ import OwnerDashboard from "@/components/dashboard/OwnerDashboard";
 import UserDashboard from "@/components/dashboard/UserDashboard";
 import useGetCity from "@/hooks/useGetCity";
 import useGetCurrentUser from "@/hooks/useGetCurrentUser";
+import useGetMyShop from "@/hooks/useGetMyShop";
 import { Loader2 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
@@ -12,6 +13,7 @@ const Home = () => {
   const { loading } = useGetCurrentUser();
   const { userData } = useSelector((state) => state.user);
   useGetCity();
+  useGetMyShop();
 
   const isLoading = loading || !userData;
   if (isLoading) {
