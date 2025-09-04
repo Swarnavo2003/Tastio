@@ -19,7 +19,10 @@ function App() {
         element={!userData ? <Login /> : <Navigate to="/" />}
       />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/" element={<Home />} />
+      <Route
+        path="/"
+        element={userData ? <Home /> : <Navigate to="/login" />}
+      />
       <Route path="/create-shop" element={<CreateEditShop />} />
     </Routes>
   );

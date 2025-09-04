@@ -18,7 +18,7 @@ import { Button } from "../ui/button";
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const { userData, city } = useSelector((state) => state.user);
+  const { userData, currentCity } = useSelector((state) => state.user);
   const { myShopData } = useSelector((state) => state.owner);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -61,7 +61,7 @@ const Navbar = () => {
           </h1>
           <div className="flex items-center gap-1/2">
             <FaLocationDot className="text-primary text-xs" />
-            <span className="font-semibold text-xs">{city}</span>
+            <span className="font-semibold text-xs">{currentCity}</span>
           </div>
         </div>
 
