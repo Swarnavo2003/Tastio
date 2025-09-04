@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import ForgotPassword from "./pages/ForgotPassword";
 import Home from "./pages/Home";
 import { useSelector } from "react-redux";
-import CreateShop from "./pages/CreateShop";
+import CreateEditShop from "./pages/CreateEditShop";
 
 function App() {
   const { userData } = useSelector((state) => state.user);
@@ -20,7 +20,7 @@ function App() {
       />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/" element={<Home />} />
-      <Route path="/create-shop" element={<CreateShop />} />
+      <Route path="/create-shop" element={<CreateEditShop />} />
     </Routes>
   );
 }
