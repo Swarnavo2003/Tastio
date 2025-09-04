@@ -45,7 +45,36 @@ const OwnerDashboard = () => {
             </Card>
           </div>
         ) : (
-          <div>Add Items To Shop</div>
+          <div className="w-full max-w-3xl mx-auto">
+            <div className="text-center mb-2 flex items-center justify-center">
+              <Utensils className="text-primary size-8" />
+              <h1 className="text-2xl font-semibold ml-2">
+                Welcome To {myShopData.name}
+              </h1>
+            </div>
+            <Card className="w-full pt-0">
+              <img
+                src={myShopData.image.url}
+                alt=""
+                className="rounded-t-2xl w-full object-contain h-96"
+              />
+              <CardHeader>
+                <CardTitle className="text-3xl font-semibold">
+                  {myShopData.name}
+                </CardTitle>
+                <CardDescription>
+                  {myShopData.city}, {myShopData.state}
+                  <br />
+                  {myShopData.address}
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            {myShopData.items.length === 0 ? (
+              <div className="text-center mt-10">No Items Added</div>
+            ) : (
+              <div>Items Are Here</div>
+            )}
+          </div>
         )}
       </div>
     </div>
