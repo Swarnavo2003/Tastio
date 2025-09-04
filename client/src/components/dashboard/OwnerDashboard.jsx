@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Utensils } from "lucide-react";
+import { Pen, Utensils } from "lucide-react";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -52,7 +52,13 @@ const OwnerDashboard = () => {
                 Welcome To {myShopData.name}
               </h1>
             </div>
-            <Card className="w-full pt-0">
+            <Card className="w-full pt-0 relative">
+              <div
+                onClick={() => navigate("/create-shop")}
+                className="absolute top-4 right-4 cursor-pointer bg-primary p-2 rounded-full"
+              >
+                <Pen className="text-white size-4" />
+              </div>
               <img
                 src={myShopData.image.url}
                 alt=""
