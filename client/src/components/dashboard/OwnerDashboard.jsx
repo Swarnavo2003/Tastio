@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -76,7 +75,9 @@ const OwnerDashboard = () => {
               </CardHeader>
             </Card>
             {myShopData.items.length === 0 ? (
-              <div className="text-center mt-10">No Items Added</div>
+              <div className="text-center mt-10 w-full max-w-lg mx-auto">
+                <Card></Card>
+              </div>
             ) : (
               <div>Items Are Here</div>
             )}

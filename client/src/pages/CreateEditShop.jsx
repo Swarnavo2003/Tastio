@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const CreateEditShop = () => {
-  const { shopData } = useSelector((state) => state.owner);
+  const { myShopData } = useSelector((state) => state.owner);
   const navigate = useNavigate();
   return (
     <div className="relative">
@@ -16,7 +16,7 @@ const CreateEditShop = () => {
         <ChevronLeft className="text-primary" />
       </div>
       <div className="w-full max-w-xl md:max-w-3xl mx-auto py-10">
-        <div>{shopData ? <EditShopForm /> : <CreateShopForm />}</div>
+        <div>{myShopData ? <EditShopForm /> : <CreateShopForm />}</div>
       </div>
     </div>
   );
