@@ -45,12 +45,6 @@ const OwnerDashboard = () => {
           </div>
         ) : (
           <div className="w-full max-w-3xl mx-auto">
-            <div className="text-center mb-2 flex items-center justify-center">
-              <Utensils className="text-primary size-8" />
-              <h1 className="text-2xl font-semibold ml-2">
-                Welcome To {myShopData.name}
-              </h1>
-            </div>
             <Card className="w-full pt-0 relative">
               <div
                 onClick={() => navigate("/create-shop")}
@@ -61,7 +55,7 @@ const OwnerDashboard = () => {
               <img
                 src={myShopData.image.url}
                 alt=""
-                className="rounded-t-2xl w-full object-contain h-96"
+                className="rounded-t-2xl w-fit object-cover h-80"
               />
               <CardHeader>
                 <CardTitle className="text-3xl font-semibold">
@@ -75,8 +69,26 @@ const OwnerDashboard = () => {
               </CardHeader>
             </Card>
             {myShopData.items.length === 0 ? (
-              <div className="text-center mt-10 w-full max-w-lg mx-auto">
-                <Card></Card>
+              <div className="text-center mt-2 w-full max-w-lg mx-auto">
+                <Card className="p-4">
+                  <CardHeader>
+                    <CardTitle className="text-2xl font-semibold">
+                      Add Your Food Items
+                    </CardTitle>
+                    <CardDescription>
+                      Share your delicious creation with our cutomers by adding
+                      them to the menu
+                    </CardDescription>
+                  </CardHeader>
+                  <CardFooter className="flex items-center justify-center">
+                    <Button
+                      onClick={() => navigate("/create-item")}
+                      className="rounded-full cursor-pointer"
+                    >
+                      Add Food
+                    </Button>
+                  </CardFooter>
+                </Card>
               </div>
             ) : (
               <div>Items Are Here</div>

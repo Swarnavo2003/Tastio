@@ -47,7 +47,7 @@ const EditShopForm = () => {
       }
 
       const response = await axios.post(
-        `${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/shop/create-shop`,
+        `${import.meta.env.VITE_BACKEND_BASE_URL}/api/v1/shop/update-shop`,
         form,
         {
           headers: {
@@ -83,7 +83,7 @@ const EditShopForm = () => {
           <div className="bg-primary/30 rounded-full w-16 p-3">
             <Utensils className="text-primary size-10" />
           </div>
-          <h1 className="text-2xl font-semibold text-primary">Create Shop</h1>
+          <h1 className="text-2xl font-semibold text-primary">Edit Shop</h1>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -146,14 +146,25 @@ const EditShopForm = () => {
               className="cursor-pointer"
             />
 
-            {myShopData && myShopData.image && (
+            {formData.image ? (
               <div className="mt-2">
                 <img
-                  src={myShopData.image.url}
+                  src={URL.createObjectURL(formData.image)}
                   alt="Shop Image"
                   className="w-60 h-40 object-cover rounded-2xl"
                 />
               </div>
+            ) : (
+              myShopData &&
+              myShopData.image && (
+                <div className="mt-2">
+                  <img
+                    src={myShopData.image.url}
+                    alt="Shop Image"
+                    className="w-60 h-40 object-cover rounded-2xl"
+                  />
+                </div>
+              )
             )}
           </div>
 
@@ -162,7 +173,7 @@ const EditShopForm = () => {
             disabled={loading}
             className="w-full cursor-pointer"
           >
-            {loading ? "Edit Shop..." : "Edit Shop"}
+            {loading ? "Editing Shop..." : "Edit Shop"}
           </Button>
         </form>
       </CardContent>
