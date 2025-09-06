@@ -9,6 +9,7 @@ import {
 import { Pen, Utensils } from "lucide-react";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router-dom";
+import ItemCard from "./ItemCard";
 
 const OwnerDashboard = () => {
   const { myShopData } = useSelector((state) => state.owner);
@@ -91,7 +92,11 @@ const OwnerDashboard = () => {
                 </Card>
               </div>
             ) : (
-              <div>Items Are Here</div>
+              <div className="w-full max-w-2xl mx-auto mt-2">
+                {myShopData.items.map((item) => (
+                  <ItemCard key={item._id} item={item} />
+                ))}
+              </div>
             )}
           </div>
         )}
