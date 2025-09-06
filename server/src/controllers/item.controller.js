@@ -24,17 +24,18 @@ export const addItem = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Shop not found");
   }
 
-  const result = addItemSchema.safeParse(req.body);
-  if (!result.success) {
-    throw new ApiError(400, result.error.message);
-  }
-
-  const { name, price, category, foodType } = result.data;
-
   let image;
   if (req.files && req.files.image && req.files.image.length > 0) {
     image = req.files.image[0].path;
   }
+
+  const result = addItemSchema.safeParse(req.body);
+  if (!result.success) {
+    fs.unlinkSync(image);
+    throw new ApiError(400, result.error.message);
+  }
+
+  const { name, price, category, foodType } = result.data;
 
   const existingItemInShop = shop.items.find((item) => item.name === name);
   if (existingItemInShop && fs.existsSync(image)) {
@@ -60,10 +61,11 @@ export const addItem = asyncHandler(async (req, res) => {
   });
   shop.items.push(item._id);
   await shop.save();
+  await shop.populate("items");
 
   return res
     .status(201)
-    .json(new ApiResponse(201, item, `Item added to shop ${shop.name}`));
+    .json(new ApiResponse(201, shop, `Item added to shop ${shop.name}`));
 });
 
 export const editItem = asyncHandler(async (req, res) => {

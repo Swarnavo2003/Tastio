@@ -12,7 +12,6 @@ const useGetMyShop = () => {
     setLoading(true);
     try {
       const response = await axiosInstance.get("/shop/get-shop");
-      console.log(response.data);
       dispatch(setMyShopData(response.data.data));
       setShop(response.data.data);
       setError(null);
