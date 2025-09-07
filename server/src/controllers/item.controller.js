@@ -68,6 +68,38 @@ export const addItem = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, shop, `Item added to shop ${shop.name}`));
 });
 
+export const getItem = asyncHandler(async (req, res) => {
+  const itemId = req.params.id;
+
+  const ownerId = req.user._id;
+  if (!ownerId) {
+    throw new ApiError(401, "Unauthorized");
+  }
+
+  const shop = await Shop.findOne({ owner: ownerId });
+  if (!shop) {
+    throw new ApiError(404, "Shop not found");
+  }
+
+  const item = await Item.findOne({
+    _id: itemId,
+    shop: shop._id,
+  });
+  if (!item) {
+    throw new ApiError(404, "Item not found");
+  }
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        item,
+        item.length === 0 ? "No item found" : "Item found"
+      )
+    );
+});
+
 export const editItem = asyncHandler(async (req, res) => {
   const itemId = req.params.id;
 
@@ -81,7 +113,7 @@ export const editItem = asyncHandler(async (req, res) => {
     throw new ApiError(401, "Unauthorized");
   }
 
-  const shop = await Shop.findOne({ owner: ownerId }).populate("items");
+  const shop = await Shop.findOne({ owner: ownerId });
   if (!shop) {
     throw new ApiError(404, "Shop not found");
   }
@@ -117,6 +149,7 @@ export const editItem = asyncHandler(async (req, res) => {
   if (foodType) item.foodType = foodType;
 
   await item.save();
+  await shop.populate("items");
 
-  return res.status(200).json(new ApiResponse(200, item, "Item updated"));
+  return res.status(200).json(new ApiResponse(200, shop, "Item updated"));
 });

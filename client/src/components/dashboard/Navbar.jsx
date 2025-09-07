@@ -94,6 +94,7 @@ const Navbar = () => {
                 <Button
                   size={"sm"}
                   variant="outline"
+                  onClick={() => navigate("/create-item")}
                   className="border-2 border-primary text-primary hover:text-primary/90 hover:bg-primary/10 cursor-pointer"
                 >
                   <PlusCircle className="mr-0 md:mr-1" />

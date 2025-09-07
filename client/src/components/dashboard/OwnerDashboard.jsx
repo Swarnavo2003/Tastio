@@ -92,7 +92,7 @@ const OwnerDashboard = () => {
                 </Card>
               </div>
             ) : (
-              <div className="w-full max-w-2xl mx-auto mt-2">
+              <div className="w-full max-w-2xl mx-auto my-4 space-y-2">
                 {myShopData.items.map((item) => (
                   <ItemCard key={item._id} item={item} />
                 ))}

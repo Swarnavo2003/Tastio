@@ -2,7 +2,7 @@ import CreateItemForm from "@/components/form/CreateItemForm";
 import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const CreateEditItem = () => {
+const CreateItem = () => {
   const navigate = useNavigate();
   return (
     <div className="relative">
@@ -21,4 +21,4 @@ const CreateEditItem = () => {
   );
 };
 
-export default CreateEditItem;
+export default CreateItem;

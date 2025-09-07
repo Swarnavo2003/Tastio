@@ -67,7 +67,6 @@ const CreateItemForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(formData);
     try {
       const form = new FormData();
       form.append("name", formData.name.trim());
