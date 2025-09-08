@@ -1,7 +1,12 @@
 import express from "express";
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
-import { addItem, editItem, getItem } from "../controllers/item.controller.js";
+import {
+  addItem,
+  deleteItem,
+  editItem,
+  getItem,
+} from "../controllers/item.controller.js";
 
 const itemRouter = express.Router();
 
@@ -20,5 +25,7 @@ itemRouter.put(
   upload.fields([{ name: "image", maxCount: 1 }]),
   editItem
 );
+
+itemRouter.delete("/delete-item/:id", isAuthenticated, deleteItem);
 
 export default itemRouter;

@@ -153,3 +153,35 @@ export const editItem = asyncHandler(async (req, res) => {
 
   return res.status(200).json(new ApiResponse(200, shop, "Item updated"));
 });
+
+export const deleteItem = asyncHandler(async (req, res) => {
+  const itemId = req.params.id;
+
+  const ownerId = req.user._id;
+  if (!ownerId) {
+    throw new ApiError(401, "Unauthorized");
+  }
+
+  const shop = await Shop.findOne({
+    owner: ownerId,
+  });
+
+  if (!shop) {
+    throw new ApiError(404, "Shop not found");
+  }
+
+  const item = await Item.findByIdAndDelete(itemId);
+  if (!item) {
+    throw new ApiError(404, "Item not found");
+  }
+
+  if (item.image.public_id) {
+    await deleteFromCloudinary(item.image.public_id);
+  }
+
+  shop.items = shop.items.filter((item) => item._id.toString() !== itemId);
+  await shop.save();
+  await shop.populate("items");
+
+  return res.status(200).json(new ApiResponse(200, shop, "Item deleted"));
+});

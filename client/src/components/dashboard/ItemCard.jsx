@@ -1,9 +1,34 @@
-import { Pen, Trash2 } from "lucide-react";
+import { Loader2, Pen, Trash2 } from "lucide-react";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { axiosInstance } from "@/lib/axios";
+import { useDispatch } from "react-redux";
+import { setMyShopData } from "@/store/slices/ownerSlice";
+import { useState } from "react";
 
 const ItemCard = ({ item }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+
+  const handleDelete = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.delete(
+        `/item/delete-item/${item._id}`
+      );
+      if (response.data.success) {
+        dispatch(setMyShopData(response.data.data));
+        toast.success(response.data.message || "Item Deleted Successfully!");
+      }
+    } catch (error) {
+      const message = error.response.data.message || "Something went wrong";
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Card>
       <CardHeader>
@@ -25,8 +50,15 @@ const ItemCard = ({ item }) => {
                 >
                   <Pen className="cursor-pointer size-4 text-white" />
                 </div>
-                <div className="bg-primary rounded-full p-2">
-                  <Trash2 className="cursor-pointer size-4 text-white" />
+                <div
+                  onClick={handleDelete}
+                  className="bg-primary rounded-full p-2"
+                >
+                  {loading ? (
+                    <Loader2 className="animate-spin text-white size-4" />
+                  ) : (
+                    <Trash2 className="cursor-pointer size-4 text-white" />
+                  )}
                 </div>
               </div>
             </div>

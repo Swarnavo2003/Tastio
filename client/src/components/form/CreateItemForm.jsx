@@ -114,7 +114,7 @@ const CreateItemForm = () => {
           <div className="bg-primary/30 rounded-full w-16 p-3">
             <Utensils className="text-primary size-10" />
           </div>
-          <h1 className="text-2xl font-semibold text-primary">Edit Item</h1>
+          <h1 className="text-2xl font-semibold text-primary">Create Item</h1>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -126,7 +126,7 @@ const CreateItemForm = () => {
               name="name"
               value={formData.name}
               onChange={handleInputChange}
-              placeholder="Enter shop name"
+              placeholder="Enter item name"
               className="focus:outline-none ring-0 focus:ring-offset-0 focus:border-input focus-visible:ring-0 focus-visible:ring-offset-0"
             />
           </div>
